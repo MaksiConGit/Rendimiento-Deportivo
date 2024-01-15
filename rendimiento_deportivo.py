@@ -1,5 +1,6 @@
 import os
 import datetime
+import sys
 
 RENDIMIENTO_SALTOS_DIR = os.getcwd() + "\\config\\RENDIMIENTO_SALTOS.txt"
 RENDIMIENTO_CAMINAR_DIR = os.getcwd() + "\\config\\RENDIMIENTO_CAMINAR.txt"
@@ -34,39 +35,40 @@ def obtener_datos_agrupados(rendimiento_path):
 
     return datos_agrupados
 
+fecha_actual = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+respuesta = input("\n¿Cuántos pasos hiciste ayer en 60 minutos?\n\n")
+
+with open(RENDIMIENTO_CAMINAR_DIR, "a", encoding="utf-8") as rendimiento:
+    rendimiento.write(respuesta + " - " + fecha_actual + "\n")
+
+print("\nDatos almacenados.\n")
+
+fecha_actual = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
+respuesta = input("\n¿Cuántos saltos hiciste hoy en 30 minutos?\n\n")
+
+with open(RENDIMIENTO_SALTOS_DIR, "a", encoding="utf-8") as rendimiento:
+    rendimiento.write(respuesta + " - " + fecha_actual + "\n")
+
+print("\nDatos almacenados.\n")
 
 while True:
 
-    print("\n\n¿Qué ejercicio hiciste hoy?")
+    opcion = input("\n\n¿Quieres consultar los datos? (y/n)\n\n")
 
-    opcion = input("\n1. Caminar\n2. Saltar la soga\n3. Consultar datos\n\n")
+    if opcion == "y":
 
-    if opcion == "1":
-        fecha_actual = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        respuesta = input("\n¿Cuántos pasos hiciste en 60 minutos?\n\n")
-
-        with open(RENDIMIENTO_CAMINAR_DIR, "a", encoding="utf-8") as rendimiento:
-            rendimiento.write(respuesta + " - " + fecha_actual + "\n")
-
-    elif opcion == "2":
-        fecha_actual = datetime.datetime.now().strftime("%Y-%m-%d %H:%M:%S")
-        respuesta = input("\n¿Cuántos saltos hiciste en 30 minutos?\n\n")
-
-        with open(RENDIMIENTO_SALTOS_DIR, "a", encoding="utf-8") as rendimiento:
-            rendimiento.write(respuesta + " - " + fecha_actual + "\n")
-
-    elif opcion == "3":
         datos_agrupados_caminar = obtener_datos_agrupados(RENDIMIENTO_CAMINAR_DIR)
-        print("\nDatos de Caminar:\n")
+        print("\n\nDatos de Caminar:\n")
         for clave, datos in datos_agrupados_caminar.items():
             print(f"{clave}")
             for pasos in datos['pasos_saltos']:
                 print(f"{pasos} pasos")
-            print()
+            total_pasos_semana = sum(datos['pasos_saltos'])
+            print(f"\nTotal de pasos en la semana: {total_pasos_semana}\n")
 
         # Imprimir total de pasos de caminar
         total_pasos_caminar = sum(sum(datos['pasos_saltos']) for datos in datos_agrupados_caminar.values())
-        print(f"Total de pasos: {total_pasos_caminar}\n\n")
+        print(f"\nTotal de pasos: {total_pasos_caminar}\n")
 
         datos_agrupados_saltos = obtener_datos_agrupados(RENDIMIENTO_SALTOS_DIR)
         print("Datos de Saltos:\n")
@@ -74,8 +76,23 @@ while True:
             print(f"{clave}")
             for saltos in datos['pasos_saltos']:
                 print(f"{saltos} saltos")
-            print()
+            total_saltos_semana = sum(datos['pasos_saltos'])
+            print(f"\nTotal de saltos en la semana: {total_saltos_semana}\n")
+
+            # Calcular y mostrar el porcentaje de mejora
+            if clave != "Semana 1":
+                semana_anterior = f"Semana {int(clave.split()[1]) - 1}"
+                if semana_anterior in datos_agrupados_saltos:
+                    saltos_semana_anterior = sum(datos_agrupados_saltos[semana_anterior]["pasos_saltos"])
+                    porcentaje_mejora = ((total_saltos_semana - saltos_semana_anterior) / saltos_semana_anterior) * 100
+                    print(f"Porcentaje de mejora: {porcentaje_mejora:.2f}%\n")
 
         # Imprimir total de saltos generales
         total_saltos = sum(sum(datos['pasos_saltos']) for datos in datos_agrupados_saltos.values())
-        print(f"Total de saltos: {total_saltos}")
+        print(f"\nTotal de saltos: {total_saltos}")
+
+        input("\n\nPresione ENTER para salir")
+        sys.exit()
+
+    elif opcion == "n":
+        sys.exit()
