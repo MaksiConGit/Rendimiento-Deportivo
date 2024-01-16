@@ -3,6 +3,9 @@ import datetime
 import sys
 from colorama import Fore, Back, Style, init
 
+if not os.path.exists(os.getcwd() + "\\config\\"):
+    os.makedirs("config")
+
 RENDIMIENTO_SALTOS_DIR = os.getcwd() + "\\config\\RENDIMIENTO_SALTOS.txt"
 RENDIMIENTO_CAMINAR_DIR = os.getcwd() + "\\config\\RENDIMIENTO_CAMINAR.txt"
 
@@ -74,7 +77,7 @@ while True:
                 print(Fore.MAGENTA + f"{i}. " + Fore.RESET + f"{pasos:,} pasos")  # Utilizar el formato de cadena con comas
 
             total_pasos_semana = sum(datos['pasos_saltos'])
-            print(Fore.LIGHTMAGENTA_EX + f"Total de pasos en la semana: {total_pasos_semana:,}\n" + Fore.LIGHTMAGENTA_EX)
+            print(Fore.LIGHTMAGENTA_EX + f"\nTotal de pasos en la semana: {total_pasos_semana:,}\n" + Fore.LIGHTMAGENTA_EX)
 
         # Imprimir total de pasos de caminar
         total_pasos_caminar = sum(sum(datos['pasos_saltos']) for datos in datos_agrupados_caminar.values())
