@@ -3,11 +3,11 @@ import datetime
 import sys
 from colorama import Fore, Back, Style, init
 
-if not os.path.exists(os.getcwd() + "\\config\\"):
+if not os.path.exists("D:\\Maksi\\Escritorio\\Scripts automatizados\\Rendimiento Deportivo\\config\\"):
     os.makedirs("config")
 
-RENDIMIENTO_SALTOS_DIR = os.getcwd() + "\\config\\RENDIMIENTO_SALTOS.txt"
-RENDIMIENTO_CAMINAR_DIR = os.getcwd() + "\\config\\RENDIMIENTO_CAMINAR.txt"
+RENDIMIENTO_SALTOS_DIR = os.getcwd() + "D:\\Maksi\\Escritorio\\Scripts automatizados\\Rendimiento Deportivo\\config\\RENDIMIENTO_SALTOS.txt"
+RENDIMIENTO_CAMINAR_DIR = os.getcwd() + "D:\\Maksi\\Escritorio\\Scripts automatizados\\Rendimiento Deportivo\\config\\RENDIMIENTO_CAMINAR.txt"
 
 def obtener_datos_agrupados(rendimiento_path):
     with open(rendimiento_path, "r", encoding="utf-8") as rendimiento:
