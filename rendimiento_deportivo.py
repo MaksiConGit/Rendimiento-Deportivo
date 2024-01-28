@@ -66,6 +66,17 @@ def consultar_datos():
                 total_pasos_semana = sum(datos['pasos_saltos'])
                 print(Fore.LIGHTMAGENTA_EX + f"\nTotal de pasos en la semana: {total_pasos_semana:,}\n" + Fore.LIGHTMAGENTA_EX)
 
+                # Calcular y mostrar el porcentaje de mejora
+                if clave != "Semana 1":
+                    semana_anterior = f"Semana {int(clave.split()[1]) - 1}"
+                    if semana_anterior in datos_agrupados_caminar:
+                        pasos_semana_anterior = sum(datos_agrupados_caminar[semana_anterior]["pasos_saltos"])
+                        porcentaje_mejora = ((total_pasos_semana - pasos_semana_anterior) / pasos_semana_anterior) * 100
+                        color_porcentaje = Fore.RED if porcentaje_mejora < 0 else Fore.GREEN
+
+                        signo = "+" if porcentaje_mejora >= 0 else ""
+                        print(f"Porcentaje de mejora: {color_porcentaje}{signo}{porcentaje_mejora:.2f}%{Fore.RESET}\n")
+                    
             # Imprimir total de pasos de caminar
             total_pasos_caminar = sum(sum(datos['pasos_saltos']) for datos in datos_agrupados_caminar.values())
             print(Fore.LIGHTYELLOW_EX + f"\nTotal de pasos: {total_pasos_caminar:,}\n")
@@ -92,7 +103,8 @@ def consultar_datos():
                             # Seleccionar el color en función del signo del porcentaje
                             color_porcentaje = Fore.RED if porcentaje_mejora < 0 else Fore.GREEN
 
-                            print(f"Porcentaje de mejora: {color_porcentaje}{porcentaje_mejora:.2f}%{Fore.RESET}\n")
+                        signo = "+" if porcentaje_mejora >= 0 else ""
+                        print(f"Porcentaje de mejora: {color_porcentaje}{signo}{porcentaje_mejora:.2f}%{Fore.RESET}\n")
                         
 
             # Imprimir total de saltos generales
